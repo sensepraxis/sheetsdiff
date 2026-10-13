@@ -173,7 +173,7 @@ export function BillingPanel({
           <p className="mt-2 text-[var(--muted)]">
             Your plan stays active until{" "}
             <span className="font-medium text-[var(--ink)]">
-              {formatDate(billing?.periodEndsAt ?? billing?.cancelAt)}
+              {formatDate(billing?.periodEndsAt ?? billing?.cancelAt ?? null)}
             </span>
             . After that you return to Free and won&apos;t be charged again.
             The current period is not refunded.

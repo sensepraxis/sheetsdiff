@@ -111,8 +111,7 @@ async function handleSubscription(
   let scheduledAt: string | null = sub.scheduledChange?.effectiveAt ?? null;
   let accessPlan: PlanId = plan;
 
-  const isTerminal =
-    sub.status === "canceled" || sub.status === "expired";
+  const isTerminal = sub.status === "canceled";
 
   // Canceled subscriptions always drop to Free once status flips.
   if (isTerminal) {
