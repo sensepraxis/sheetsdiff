@@ -19,7 +19,9 @@ export const metadata: Metadata = {
     "Match two spreadsheets. See what’s left. Drop any two CSVs or Excels — get matched, only-A, only-B, and the dollars that don’t tie.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"

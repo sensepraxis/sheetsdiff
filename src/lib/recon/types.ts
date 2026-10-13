@@ -36,7 +36,11 @@ export type MatchResult =
       explanation: string;
     }
   | {
-      status: "only_a" | "only_b";
+      status: "only_a";
+      row: TransactionRow;
+    }
+  | {
+      status: "only_b";
       row: TransactionRow;
     }
   | {

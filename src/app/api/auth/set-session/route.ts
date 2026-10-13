@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import {
   getSupabasePublishableKey,
@@ -9,7 +9,7 @@ import {
  * Accept browser tokens (from localStorage PKCE login) and persist them
  * as Supabase SSR cookies for server components / middleware.
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const body = (await request.json().catch(() => null)) as {
     access_token?: string;
     refresh_token?: string;
