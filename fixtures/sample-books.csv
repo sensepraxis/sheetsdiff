@@ -1,0 +1,6 @@
+Txn Date,Amount,Memo,Ref
+2026-09-01,-120.00,Office supplies,#1001
+2026-09-02,2500.00,Invoice 88 cash,INV-88
+2026-09-03,-45.50,Cloud hosting,AWS-9
+2026-09-04,-100.00,Partial fee split A,FEE-A
+2026-09-04,-18.00,Partial fee split B,FEE-B

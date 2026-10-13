@@ -1,0 +1,6 @@
+Date,Amount,Description,Reference
+2026-09-01,-120.00,Office Depot,#1001
+2026-09-02,2500.00,Customer payment INV-88,INV-88
+2026-09-03,-45.50,AWS charges,AWS-9
+2026-09-04,-120.00,Duplicate lookalike,#1002
+2026-09-05,-18.00,Bank fee,FEE-1
