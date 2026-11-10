@@ -20,55 +20,16 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(() => {
     const q = searchParams.get("error");
     if (!q) return null;
-    if (q === "auth") return "Google sign-in failed. Please try again.";
+    if (q === "auth") return "Sign-in failed. Please try again.";
     const decoded = decodeURIComponent(q);
     if (/fetch failed|ECONNRESET|Failed to fetch|NetworkError/i.test(decoded)) {
       return "Cannot reach Supabase (network reset). Check VPN / access to *.supabase.co, then try again.";
     }
     if (/PKCE code verifier/i.test(decoded)) {
-      return "Sign-in credentials expired. Click Continue with Google again (do not reuse an old tab).";
+      return "Sign-in credentials expired. Request a new email link (do not reuse an old tab).";
     }
     return decoded;
   });
-
-  async function continueWithGoogle() {
-    setBusy(true);
-    setError(null);
-    try {
-      try {
-        Object.keys(window.localStorage)
-          .filter((k) => k.includes("code-verifier"))
-          .forEach((k) => window.localStorage.removeItem(k));
-      } catch {
-        /* ignore */
-      }
-
-      const supabase = createAuthClient();
-      const origin = window.location.origin;
-      const { data, error: authError } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
-          queryParams: {
-            access_type: "offline",
-            prompt: "select_account",
-          },
-          skipBrowserRedirect: false,
-        },
-      });
-      if (authError) {
-        setError(authError.message);
-        setBusy(false);
-        return;
-      }
-      if (data?.url) {
-        window.location.assign(data.url);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
-      setBusy(false);
-    }
-  }
 
   async function continueWithEmail(e: React.FormEvent) {
     e.preventDefault();
@@ -150,23 +111,7 @@ export function LoginForm() {
               </div>
             </div>
 
-            <button
-              type="button"
-              disabled={busy}
-              onClick={continueWithGoogle}
-              className="mt-7 flex w-full items-center justify-center gap-3 rounded-full bg-[var(--ink)] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
-            >
-              <GoogleIcon />
-              Continue with Google
-            </button>
-
-            <div className="my-5 flex items-center gap-3 text-[11px] font-semibold tracking-[0.14em] text-[var(--muted)]">
-              <span className="h-px flex-1 bg-[var(--border)]" />
-              OR
-              <span className="h-px flex-1 bg-[var(--border)]" />
-            </div>
-
-            <form onSubmit={continueWithEmail} className="space-y-3">
+            <form onSubmit={continueWithEmail} className="mt-7 space-y-3">
               <input
                 type="email"
                 required
@@ -208,28 +153,5 @@ export function LoginForm() {
         </div>
       </section>
     </div>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
-      <path
-        fill="#FFC107"
-        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.5-.4-3.5z"
-      />
-      <path
-        fill="#FF3D00"
-        d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34.2 6.1 29.4 4 24 4 16.1 4 9.2 8.5 6.3 14.7z"
-      />
-      <path
-        fill="#4CAF50"
-        d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.1 39.5 16 44 24 44z"
-      />
-      <path
-        fill="#1976D2"
-        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l.1.1 6.3 5.2C39.3 36.9 44 31.5 44 24c0-1.3-.1-2.5-.4-3.5z"
-      />
-    </svg>
   );
 }
